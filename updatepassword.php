@@ -11,7 +11,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);}
 
 
-$sql = "update employee set pass='" .$_POST['pass']. "'where id =" . $_SESSION['id'];
+$sql = "update employee set pass='" .$_POST['pass']. "'where id =" . $_SESSION['ID'];
 $result = $conn->query($sql);
 $conn->close();
 $_SESSION['response']="the password has been changed";

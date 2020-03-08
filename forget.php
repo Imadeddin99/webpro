@@ -73,7 +73,7 @@ if ($result->num_rows > 0) {
             $mail->AltBody=',,,';
             $mail->send();
             $conn->close();
-            $_SESSION['id']=$row['id'];
+            $_SESSION['ID']=$row['id'];
             $_SESSION['name']=$row['firstName'];
             $_SESSION['forget-res']="email had been sent";
             header("Location:index.php#blackout");

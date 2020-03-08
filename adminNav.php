@@ -32,7 +32,7 @@
     <div class="dropdownn" style="">
         <i class="fas fa-bars" ></i>
         <div class="dropdown-content">
-            <a href="#">User Name</a>
+            <a href="userp.php">User Name</a>
             <a href="index.php">Log out</a>
         </div>
     </div>
