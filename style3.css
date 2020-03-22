@@ -2,30 +2,22 @@ input{
     margin-bottom: 20px;
     background: none;
     border: 2px solid cornflowerblue;
-    transition: in 0.25s;
     border-radius: 15px ;
     text-align: center;
 }
+/*
 
-input:hover{
-    color: white;
-    background-color:cornflowerblue ;
-
-}
-
+*/
 select{
     margin-bottom: 20px;
     background: none;
-    border: 2px solid cornflowerblue;
+   /* border: 2px solid cornflowerblue;*/
     transition: in 0.25s;
     border-radius: 15px ;
 text-align: center;
 }
 
-select:hover{
-    color: white;
-    background-color:cornflowerblue ;
-}
+
 
 option{
     position: relative;

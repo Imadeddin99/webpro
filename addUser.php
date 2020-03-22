@@ -25,14 +25,14 @@ $last=$_POST['last'];
 $ja='';
 if($job=='Quality Assurance')$ja='QA';
 if ($job=="Admin")$ja='Ad';
-if($job=="user")$ja='u';
+if($job=="User")$ja='u';
 
 $sql = "INSERT INTO employee (id,firstName, last_name, email,job,pass,startDate,job_abbr)
 VALUES ($id, '$first','$last', '$email','$job','$passs','$date','$ja')";
 
 
 if ($conn->query($sql) === TRUE) {
-$_SESSION['ress']="Added";
+$_SESSION['ress']="The Operation is Done Successfully";
     header("Location:employeePage.php");
     $conn->close();
 

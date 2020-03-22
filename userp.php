@@ -42,10 +42,10 @@ $row=$result->fetch_assoc();
     <div class="card">
    <!-- <img id="i1" src="eng%202.png" >-->
     <div class="upload-btn-wrapper">
-        <button class="btn">Upload your pic</button>
+            <button class="btn">Upload your pic</button>
         <input type="file"
                id="avatar" name="avatar"
-               accept="image/png, image/jpeg">
+               accept="image/png, image/jpeg" onchange="uploadfile()">
     </div>
 
     <table>
@@ -74,4 +74,16 @@ $row=$result->fetch_assoc();
         <input type="button"  class="save" name="" value="change password" onclick="window.location.href='newpassword.html'" >
 </form>
 </body>
+
+
+<script>
+
+  function uploadfile(){
+      window.location.href='uploadpic.php';
+  }
+
+
+</script>
+
+
 </html>

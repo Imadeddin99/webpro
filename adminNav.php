@@ -2,46 +2,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Control Panel</title>
-    <link rel="stylesheet" href="style2.css" >
     <script src="https://kit.fontawesome.com/97db899fc1.js" crossorigin="anonymous"></script>
-    <script src="scriptDash.js"></script>
-    <!-- Latest compiled and minified CSS -->
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+    <link href="nav/jquery.responsive-collapse.css" rel="stylesheet">
+    <style>
+        body { background-color: #fafafa; font-family:'Roboto';}
+        h1 { margin:70px auto; text-align:center;}
+    </style>
 </head>
 <body>
+<div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #34495e;position: initial">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+        <img src="eng%202.png" style="width: 20%" >
 
-<div id="firstback" class="navbar">
-  <img src="eng%202.png" >
+        <div class="navbar-collapse collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <li><a href="mainPage.php"> Main Page</a></li>
+                <li><a href="employeePage.php">Employee page</a></li>
 
-    <div id="links">
-        <button class="link" title="Main page" onclick="window.location.href='mainPage.php'">Main Page</button>
-        <button  class="link" title="Emplyees page" onclick="window.location.href='employeePage.php'">Employees</button>
-        <button  class="link" title="Files">Files</button>
-        <button  class="link" title="Calender">Calender</button>
-
+                <li><a href="#">Files Page</a></li>
+                <li><a href="#">Calender Page</a></li>
 
 
-
-    <div class="dropdownn" style="">
-        <i class="fas fa-bars" ></i>
-        <div class="dropdown-content">
-            <a href="userp.php">User Name</a>
-            <a href="index.php">Log out</a>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> User <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="userp.php">Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="index.php" name="logout">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
-    </div>
-
-</div>
-<div class=" " id="page">
 </div>
 
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="nav/jquery.responsive-collapse.js"></script>
+
+<script type="text/javascript">
+    $(window).load(function() {
+        $('ul.navbar-nav').responsiveCollapse();
+    });
+</script>
+<!--<script type="text/javascript">-->
+<!---->
+<!--    var _gaq = _gaq || [];-->
+<!--    _gaq.push(['_setAccount', 'UA-36251023-1']);-->
+<!--    _gaq.push(['_setDomainName', 'jqueryscript.net']);-->
+<!--    _gaq.push(['_trackPageview']);-->
+<!---->
+<!--    (function() {-->
+<!--        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;-->
+<!--        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';-->
+<!--        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);-->
+<!--    })();-->
+<!---->
+<!--</script>-->
+<?php
+
+if (isset($_POST['logout'])){
+   session_destroy();
+
+}
+
+?>
 
 
 

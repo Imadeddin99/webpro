@@ -11,8 +11,8 @@ function deleterow(reg) {
 }
 
 function editAjax(reg,first,last,email,pass,start,job) {
-    var modal = document.getElementById("myModal");
-    modal.style.display="block";
+    $("#exampleModal").modal('toggle');
+
 
 console.log(reg);
 
