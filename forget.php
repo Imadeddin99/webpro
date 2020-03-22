@@ -67,7 +67,7 @@ if ($result->num_rows > 0) {
             $mail->Subject = 'Change Password';
             $mail->Body = '<p>Dear '.$row['firstName'].',</p><p> This email was sent to you to change the password on Scientific Centers Website , if it was you please follow
             the next link , if not just ignore this email. </p>
-            <a href="http://localhost/webpro/newpassword.html">Change Password</a>   
+            <a href="http://localhost/webpro/newpassword.php">Change Password</a>   
             <p>Thanks and regards. </p>
             <p>Admin.</p>';
             $mail->AltBody=',,,';

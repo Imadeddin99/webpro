@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style4.css" >
     <script src="checkvalidation.js"></script>
 </head>
-<body style="background-color: black">
+<body style="background-color: #34495e">
 <form class="box" action="updatepassword.php" method="post">
     <h1> new password</h1>
     <p style="color: red" id="errormsg"></p>

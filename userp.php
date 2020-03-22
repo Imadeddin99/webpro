@@ -1,7 +1,6 @@
 <?php
 
 session_start();
-
 include 'adminNav.php';
 $servername = "localhost";
 $username='root';
@@ -35,17 +34,17 @@ $row=$result->fetch_assoc();
      </head>
 <body>
 
-<form class="box" action="index.html" method="post">
+<form class="box" action="uploadpic.php" method="post"  enctype="multipart/form-data">
     <div id="pic1">
 
     </div>
     <div class="card">
    <!-- <img id="i1" src="eng%202.png" >-->
     <div class="upload-btn-wrapper">
-            <button class="btn">Upload your pic</button>
+            <button class="btn" type="submit" id="submit" name="submit">Upload your pic</button>
         <input type="file"
                id="avatar" name="avatar"
-               accept="image/png, image/jpeg" onchange="uploadfile()">
+               accept="image/png, image/jpeg" onchange="document.getElementById('submit').click()">
     </div>
 
     <table>
@@ -71,7 +70,7 @@ $row=$result->fetch_assoc();
         </tr>
 
     </table>
-        <input type="button"  class="save" name="" value="change password" onclick="window.location.href='newpassword.html'" >
+        <input type="button"  class="save" name="" value="change password" onclick="window.location.href='newpassword.php'" >
 </form>
 </body>
 
