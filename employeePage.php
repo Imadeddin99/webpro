@@ -64,7 +64,7 @@ $_SESSION['ress']="";
     $sql = "SELECT id, firstName, last_name,pass,job,startDate,email FROM employee";
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
+    if ($result&&$result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
     $id=$row['id'];
@@ -85,13 +85,14 @@ $_SESSION['ress']="";
             echo '<td><input type="button" value="delete" class="btn btn-secondary btn-sm" style="background-color: red;color: white"
  onclick="deleterow('.$id.')"></td>';
 
+            echo "</tr>";
 
         }
     }
 
 
 
-
+$conn->close();
 
     ?>
 

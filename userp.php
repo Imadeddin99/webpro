@@ -17,7 +17,7 @@ $sql = "SELECT * FROM employee where id=".$_SESSION['ID'];
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0)
-$row=$result->fetch_assoc();
+    $row=$result->fetch_assoc();
 
 
 ?>
@@ -28,10 +28,10 @@ $row=$result->fetch_assoc();
 
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <title></title>
-     <link rel="stylesheet" href="style6.css" >
-     </head>
+    <link rel="stylesheet" href="style6.css" >
+</head>
 <body>
 
 <form class="box" action="uploadpic.php" method="post"  enctype="multipart/form-data">
@@ -39,37 +39,37 @@ $row=$result->fetch_assoc();
 
     </div>
     <div class="card">
-   <!-- <img id="i1" src="eng%202.png" >-->
-    <div class="upload-btn-wrapper">
+        <img id="i1" src="eng%202.png" >
+        <div class="upload-btn-wrapper">
             <button class="btn" type="submit" id="submit" name="submit">Upload your pic</button>
-        <input type="file"
-               id="avatar" name="avatar"
-               accept="image/png, image/jpeg" onchange="document.getElementById('submit').click()">
-    </div>
+            <input type="file"
+                   id="avatar" name="avatar"
+                   accept="image/png, image/jpeg" onchange="document.getElementById('submit').click()">
+        </div>
 
-    <table>
-        <tr>
-            <th>Name :</th>
-            <td><?php echo "".$row['firstName']." ".$row['last_name']; ?></td>
-        </tr>
-        <tr>
-            <th>&nbsp;&nbsp;ID :</th>
-            <td><?php echo "".$row['id']; ?></td>
-        </tr>
-        <tr>
-            <th>Email :</th>
-            <td> <?php echo "".$row['email']; ?> </td>
-        </tr>
-        <tr>
-            <th>Jop position :</th>
-            <td><?php echo "".$row['job']; ?></td>
-        </tr>
-        <tr>
-            <th>Start Date :</th>
-            <td><?php echo "".$row['startDate']; ?></td>
-        </tr>
+        <table>
+            <tr>
+                <th>Name :</th>
+                <td><?php echo "".$row['firstName']." ".$row['last_name']; ?></td>
+            </tr>
+            <tr>
+                <th>&nbsp;&nbsp;ID :</th>
+                <td><?php echo "".$row['id']; ?></td>
+            </tr>
+            <tr>
+                <th>Email :</th>
+                <td> <?php echo "".$row['email']; ?> </td>
+            </tr>
+            <tr>
+                <th>Jop position :</th>
+                <td><?php echo "".$row['job']; ?></td>
+            </tr>
+            <tr>
+                <th>Start Date :</th>
+                <td><?php echo "".$row['startDate']; ?></td>
+            </tr>
 
-    </table>
+        </table>
         <input type="button"  class="save" name="" value="change password" onclick="window.location.href='newpassword.php'" >
 </form>
 </body>
@@ -77,9 +77,9 @@ $row=$result->fetch_assoc();
 
 <script>
 
-  function uploadfile(){
-      window.location.href='uploadpic.php';
-  }
+    function uploadfile(){
+        window.location.href='uploadpic.php';
+    }
 
 
 </script>

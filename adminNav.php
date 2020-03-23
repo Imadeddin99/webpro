@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #34495e;position: initial">
+<div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #34495e;position: initial;">
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -22,14 +22,14 @@
                 <span class="icon-bar"></span>
             </a>
         </div>
-        <img src="eng%202.png" style="width: 20%" >
+        <img src="eng%202.png" style="width: 25% ; margin-left:-9%;" >
 
         <div class="navbar-collapse collapse navbar-right">
             <ul class="nav navbar-nav">
                 <li><a href="mainPage.php"> Main Page</a></li>
                 <li><a href="employeePage.php">Employee page</a></li>
 
-                <li><a href="#">Files Page</a></li>
+                <li><a href="filePage.php">Files Page</a></li>
                 <li><a href="#">Calender Page</a></li>
 
 
@@ -73,7 +73,7 @@
 <?php
 
 if (isset($_POST['logout'])){
-   session_destroy();
+    session_destroy();
 
 }
 
