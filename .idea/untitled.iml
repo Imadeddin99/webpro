@@ -13,5 +13,7 @@
     <orderEntry type="library" name="bootstrap-theme" level="application" />
     <orderEntry type="library" name="97db899fc1" level="application" />
     <orderEntry type="library" name="font-awesome" level="application" />
+    <orderEntry type="library" name="bootstrap-multiselect" level="application" />
+    <orderEntry type="library" name="bootstrap3-typeahead" level="application" />
   </component>
 </module>

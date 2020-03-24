@@ -29,17 +29,16 @@ if ($result->num_rows > 0)
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-control" content="no-cache">
     <title></title>
     <link rel="stylesheet" href="style6.css" >
 </head>
 <body>
 
 <form class="box" action="uploadpic.php" method="post"  enctype="multipart/form-data">
-    <div id="pic1">
-
-    </div>
+    <div id="pic1" style="">  <img id="i1"   width="100%" height="100"  src="<?php echo $row['path'] ?>"  > </div>
     <div class="card">
-        <img id="i1" src="eng%202.png" >
+
         <div class="upload-btn-wrapper">
             <button class="btn" type="submit" id="submit" name="submit">Upload your pic</button>
             <input type="file"

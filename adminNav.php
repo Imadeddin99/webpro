@@ -26,7 +26,7 @@
 
         <div class="navbar-collapse collapse navbar-right">
             <ul class="nav navbar-nav">
-                <li><a href="mainPage.php"> Main Page</a></li>
+                <li><a href="mainPage.php"> Training Page</a></li>
                 <li><a href="employeePage.php">Employee page</a></li>
 
                 <li><a href="filePage.php">Files Page</a></li>
