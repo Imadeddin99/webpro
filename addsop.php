@@ -24,14 +24,22 @@ if ($result&&$result->num_rows > 0) {
         $res = $conn->query($sql);
         $version='00';
         $state='new';
-if($res&&$res->num_rows>0){
+        $number = $_POST['number'];
+        $depcode=$_POST['depcode'];
+        $logno=$_GET['LOG'];
+        if($res&&$res->num_rows>0){
+
+
+
+
+
     $row=$res->fetch_assoc();
     $sql = "update  sop set state = 'updated' where number='" . $_POST['number']."' and depcode='".$_POST['depcode']."'";
     //here to deal with version number
 
     $conn->query($sql);
 $version=$row['version'];
-echo $version;
+
     switch ($version[1]){
         case '0':$version[1]='1';break;
         case '1':$version[1]='2';break;
@@ -74,19 +82,47 @@ echo $version;
     }
 
 
+    $sql2="delete from relatedlog where sop='".$number."'";
+    $conn->query($sql2);
+
+            $sql2="delete from relatedform where sop='".$number."'";
+            $conn->query($sql2);
+
+            $sql2="delete from relateddept where sop='".$number."'";
+            $conn->query($sql2);
 
 }
 
+        foreach ($_POST['relatedlogs'] as $icon){
+
+        $sql2="insert into relatedlog(sop,log,realdept,reallog) values('$number','$icon','$depcode','$logno')";
+        $conn->query($sql2);
+
+        }
+
+
+        foreach ($_POST['relatedforms'] as $icon){
+
+            $sql2="insert into relatedform(sop,form,realdept,log) values('$number','$icon','$depcode','$logno')";
+            $conn->query($sql2);
+
+        }
+
+        foreach ($_POST['relateddepts'] as $icon){
+
+            $sql2="insert into relateddept(sop,dept,realdept,log) values('$number','$icon','$depcode','$logno')";
+            $conn->query($sql2);
+
+        }
 
 
 
-            $number = $_POST['number'];
+
             $rev=$_POST['review'];
             $eff = $_POST['effective'];
             $author=$_SESSION['first']." ".$_SESSION['last'];
             $title=$_POST['title'];
-            $depcode=$_POST['depcode'];
-            $logn=$_GET['LOG'];
+             $logn=$_GET['LOG'];
 
 
 
@@ -96,7 +132,7 @@ echo $version;
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 // Check if image file is a actual image or fake image
-            $filename="SOP-".$number."-".$version;
+            $filename=$depcode."-".$number."-".$version;
             $extension  = pathinfo( $_FILES["sop"]["name"], PATHINFO_EXTENSION );
 
             $basename2   = $target_dir.$filename . '.' . $extension; // 5dab1961e93a7_1571494241.jpg
@@ -117,13 +153,12 @@ echo $version;
            else die('Could not insert into database:' . mysqli_error($conn));
             $conn->close();
             $_SESSION['formadd'] = "Log Added Successfully";
-          // header("Location:sopspage.php?LOG=".$_GET['LOG']);
+           header("Location:sopspage.php?LOG=".$_GET['LOG']);
 
 
     }
     else{
         $_SESSION['formadd'] = "pass isn't correct";
-
         header("Location:sopspage.php?LOG=".$_GET['LOG']);
 
     }

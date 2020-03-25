@@ -5,7 +5,8 @@
     <script src="https://kit.fontawesome.com/97db899fc1.js" crossorigin="anonymous"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
+    <script src="nav/jquery.responsive-collapse.js" type="text/javascript"></script>
+ <script src="nav/bootstrap.responsive-collapse.js" type="text/javascript"></script>
     <link href="nav/jquery.responsive-collapse.css" rel="stylesheet">
     <style>
         body { background-color: #fafafa; font-family:'Roboto';}
@@ -82,6 +83,6 @@ if (isset($_POST['logout'])){
 
 
 
-
 </body>
 </html>
+<script src="nav/jquery.responsive-collapse.js"></script>

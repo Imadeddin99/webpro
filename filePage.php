@@ -50,7 +50,7 @@ if ($conn->connect_error) {
         <th>Log Title</th>
         <th>Effective Date</th>
         <th>Approved By</th>
-
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -69,7 +69,8 @@ if ($conn->connect_error) {
             echo "<td> <a href='sopsPage.php?LOG=$num'>LOG-".$row['number']."</a></td>";
             echo "<td>".$row['eff']."</td>";
             echo "<td>".$row['approved']."</td>";
-
+            echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
+style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\''.$row['number'].'\')"></td>';
             echo "</tr>";
         }
     }
@@ -93,6 +94,7 @@ if ($conn->connect_error) {
         <th>Log Title</th>
         <th>Effective Date</th>
         <th>Approved By</th>
+        <th></th>
 
     </tr>
     </tfoot>
@@ -133,6 +135,35 @@ if ($conn->connect_error) {
         </div>
     </div>
 </div>
+
+
+
+
+<script>
+
+    function deletelog(number) {
+        var page=window.location.href;
+        $.ajax({
+            type: 'POST',
+            url: 'deletelog.php',
+            data: { type: "delete",log:number },
+            success: function(response) {
+                console.log(response)
+                //window.location.href=page;
+            }
+
+        });
+    }
+
+
+
+</script>
+
+
+
+
+
+
 
 </body>
 </html>

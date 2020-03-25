@@ -43,7 +43,7 @@ if ($conn->connect_error) {
 
 
 <body onload="document.getElementById('example_wrapper').style.marginLeft='10px'">
-<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add a Log</a>
+<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add a SOP</a>
 <p>
     <?php    if(isset($_SESSION['formadd']) && !empty($_SESSION['formadd'])) {
         echo "<p style='color: red'>".$_SESSION['formadd']."</p>";
@@ -78,17 +78,41 @@ if ($conn->connect_error) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
            if( $row['logno']==$_GET['LOG']) {
+
+             $sql1="select log from relatedlog where sop='".$row['number']."'";
+             $result1=$conn->query($sql1);
+             $logs='';
+             while ($row1=$result1->fetch_assoc()){
+                 $logs=$logs.$row1['log']." , ";
+             }
+               $sql1="select form from relatedform where sop='".$row['number']."'";
+               $result1=$conn->query($sql1);
+               $forms='';
+               while ($row1=$result1->fetch_assoc()){
+                   $forms=$forms.$row1['form']." , ";
+               }
+
+
+               $sql1="select dept from relateddept where sop='".$row['number']."'";
+               $result1=$conn->query($sql1);
+               $depts='';
+               while ($row1=$result1->fetch_assoc()){
+                   $depts=$depts.$row1['dept']." , ";
+               }
+
+               $logno=$_GET['LOG'];
                $path=$row['path'];
                echo "<tr>";
                echo "<td><a href='$path' target='_blank'>" . $row['title'] . "</a></td>";
                echo "<td>" . $row['depcode'] . "-" . $row['number'] . "-" . $row['version'] . "</td>";
                echo "<td>" . $row['effective'] . "</td>";
                echo "<td>" . $row['review'] . "</td>";
-               echo "<td></td>";
-               echo "<td></td>";
-               echo "<td></td>";
+               echo "<td>".substr($logs,0,strlen($logs)-2)."</td>";
+               echo "<td>".substr($forms,0,strlen($forms)-2)."</td>";
+               echo "<td>".substr($depts,0,strlen($depts)-2)."</td>";
                echo "<td>" . $row['author'] . "</td>";
-               echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" style="background-color: red;color: white;margin-left: 0px"></td>';
+               echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
+style="background-color: red;color: white;margin-left: 0px" onclick="deletesop(\''.$row['number'].'\',\''.$row['depcode'].'\',\''.$logno.'\')"></td>';
                echo "</tr>";
            }
         }
@@ -148,6 +172,7 @@ if ($conn->connect_error) {
                     <input class="form-control form-control-lg" id="first" type="text" name="number" placeholder="SOP Number" style="margin-bottom: 10px" required pattern="[0-9]{3}" title="You should Enter Valid SOP Number">
 
                     <select class="form-control" style="margin-bottom: 10px" id="selector" name="depcode" >
+                        <option>CLN</option>
                         <option>QAU</option>
                         <option>VAL</option>
                         <option>REG</option>
@@ -164,14 +189,15 @@ if ($conn->connect_error) {
                     <input type="file" class="form-control-file" id="exampleFormControlFile1" accept="application/pdf" name="sop">
 
                     <div style="margin-bottom: 20px;margin-top: 10px">
-                    <select multiple="multiple" class="" id="logs" style="width: 100%;">
+                    <select multiple="multiple" class="" id="logs" style="width: 100%;" name="relatedlogs[]">
                       <?php
                       $sql = "SELECT number FROM log";
                       $result = $conn->query($sql);
                       if ($result && $result->num_rows > 0) {
                           // output data of each row
                           while ($row = $result->fetch_assoc()) {
-                              echo "<option>LOG-".$row['number']."</option>";
+                              $val=$row['number'];
+                              echo "<option value='$val'>LOG-".$row['number']."</option>";
                           }
                       }
                       ?>
@@ -179,14 +205,15 @@ if ($conn->connect_error) {
                     </select>
                    </div >
                     <div style="margin-bottom: 10px;">
-                    <select multiple="multiple" class="" id="forms" style="width: 100%;">
+                    <select multiple="multiple" class="" id="forms" style="width: 100%;" name="relatedforms[]">
                         <?php
-                        $sql = "SELECT number FROM form";
+                        $sql = "SELECT form FROM form";
                         $result = $conn->query($sql);
                         if ($result && $result->num_rows > 0) {
                             // output data of each row
                             while ($row = $result->fetch_assoc()) {
-                                echo "<option>form-".$row['number']."</option>";
+                                $val=$row['form'];
+                                echo "<option value='$val'>form-".$row['form']."</option>";
                             }
                         }
                         ?>
@@ -195,7 +222,7 @@ if ($conn->connect_error) {
                     </div>
 
                     <div style="margin-bottom: 10px;">
-                        <select multiple="multiple" class="" id="depts" style="width: 100%;">
+                        <select multiple="multiple" class="" id="depts" style="width: 100%;" name="relateddepts[]">
                         <option>CLN</option>
                             <option>QAU</option>
                             <option>VAL</option>
@@ -237,13 +264,29 @@ if ($conn->connect_error) {
     $(function() {
         $('#depts').multipleSelect({
             filter: true,
-            placeholder:"Select the Related Forms",
+            placeholder:"Select the Related Departments",
             animate:'slide',
         })
     })
 </script>
 
+<script>
 
+    function deletesop(id, depcode,logno) {
+       var page=window.location.href;
+        $.ajax({
+            type: 'POST',
+            url: 'deletesop.php',
+            data: { type: "delete",sop:id,dep:depcode,log:logno },
+            success: function(response) {
+                window.location.href=page;
+            }
+
+        });
+    }
+
+
+</script>
 
 
 
