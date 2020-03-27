@@ -68,7 +68,7 @@ if ($conn->connect_error) {
 
             $num=$row['number'];
             echo "<tr>";
-            echo "<td> <a href='sopsPage.php?LOG=$num'>LOG-".$row['number']."</a></td>";
+            echo "<td> <a href='form.php?LOG=$num'>LOG-".$row['number']."</a></td>";
             echo "<td>".$row['eff']."</td>";
             echo "<td>".$row['approved']."</td>";
             echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
@@ -122,7 +122,7 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
             </div>
             <div class="modal-body">
                 <form action="addlog.php" method="post">
-                    <input class="form-control form-control-lg" id="" type="text" name="number" placeholder="Log Number" style="margin-bottom: 10px" required pattern="[a-zA-Z0-9]{3}" title="You should Enter Valid Log Number">
+                    <input class="form-control form-control-lg" id="first" type="text" name="number" placeholder="Log Number" style="margin-bottom: 10px" required pattern="[a-zA-Z0-9]{3}" title="You should Enter Valid Log Number">
 
                     <input type="password" name="passs" class="form-control" id="pass" placeholder="Password" required style="margin-bottom: 10px">
 

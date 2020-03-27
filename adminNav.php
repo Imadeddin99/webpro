@@ -2,9 +2,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Control Panel</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
     <script src="https://kit.fontawesome.com/97db899fc1.js" crossorigin="anonymous"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="nav/jquery.responsive-collapse.js" type="text/javascript"></script>
  <script src="nav/bootstrap.responsive-collapse.js" type="text/javascript"></script>
     <link href="nav/jquery.responsive-collapse.css" rel="stylesheet">
@@ -29,7 +32,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="mainPage.php"> Training Page</a></li>
                 <li><a href="employeePage.php">Employee page</a></li>
-
+                <li><a href="formsPage.php">Forms Page</a></li>
                 <li><a href="filePage.php">Files Page</a></li>
                 <li><a href="#">Calender Page</a></li>
 
@@ -48,7 +51,6 @@
 </div>
 
 
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="nav/jquery.responsive-collapse.js"></script>
 
@@ -85,4 +87,3 @@ if (isset($_POST['logout'])){
 
 </body>
 </html>
-<script src="nav/jquery.responsive-collapse.js"></script>

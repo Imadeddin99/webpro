@@ -20,7 +20,7 @@ if ($result&&$result->num_rows > 0) {
     $row=$result->fetch_assoc();
     if($row['pass']==$_POST['passs']) {
 
-        $sql = "SELECT number, version FROM sop where number='" . $_POST['number']."' and depcode ='".$_POST['depcode']."' order by version desc";
+        $sql = "SELECT number, version FROM sop where number='" . $_POST['number']."' and depcode ='".$_POST['depcode']."' and logno='".$_GET['LOG']."' order by version desc";
         $res = $conn->query($sql);
         $version='00';
         $state='new';
@@ -34,7 +34,7 @@ if ($result&&$result->num_rows > 0) {
 
 
     $row=$res->fetch_assoc();
-    $sql = "update  sop set state = 'updated' where number='" . $_POST['number']."' and depcode='".$_POST['depcode']."'";
+    $sql = "update  sop set state = 'updated' where number='" . $_POST['number']."' and depcode='".$_POST['depcode']."' and logno='".$_GET['LOG']."'";
     //here to deal with version number
 
     $conn->query($sql);
@@ -82,13 +82,13 @@ $version=$row['version'];
     }
 
 
-    $sql2="delete from relatedlog where sop='".$number."'";
+    $sql2="delete from relatedlog where sop='".$number."' and reallog='".$_GET['LOG']."'";
     $conn->query($sql2);
 
-            $sql2="delete from relatedform where sop='".$number."'";
+            $sql2="delete from relatedform where sop='".$number."' and log='".$_GET['LOG']."'";
             $conn->query($sql2);
 
-            $sql2="delete from relateddept where sop='".$number."'";
+            $sql2="delete from relateddept where sop='".$number."' and log='".$_GET['LOG']."'";
             $conn->query($sql2);
 
 }

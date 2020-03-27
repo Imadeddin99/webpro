@@ -24,7 +24,9 @@ if ($conn->connect_error) {
     <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
     <!--    <link href="style3.css" rel="stylesheet">-->
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!--    <script src="deleteAjax.js" type="text/javascript"></script>-->
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
@@ -77,15 +79,16 @@ if ($conn->connect_error) {
     if ($result && $result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
+            $s=$row['number'];
            if( $row['logno']==$_GET['LOG']) {
 
-             $sql1="select log from relatedlog where sop='".$row['number']."'";
+             $sql1="select log from relatedlog where sop='".$s."' and reallog='".$_GET['LOG']."'";
              $result1=$conn->query($sql1);
              $logs='';
              while ($row1=$result1->fetch_assoc()){
                  $logs=$logs.$row1['log']." , ";
              }
-               $sql1="select form from relatedform where sop='".$row['number']."'";
+               $sql1="select form from relatedform where sop='".$s."' and log='".$_GET['LOG']."'";
                $result1=$conn->query($sql1);
                $forms='';
                while ($row1=$result1->fetch_assoc()){
@@ -93,13 +96,13 @@ if ($conn->connect_error) {
                }
 
 
-               $sql1="select dept from relateddept where sop='".$row['number']."'";
+               $sql1="select dept from relateddept where sop='".$s."' and log='".$_GET['LOG']."'";
                $result1=$conn->query($sql1);
                $depts='';
                while ($row1=$result1->fetch_assoc()){
+                   echo $row1['dept'];
                    $depts=$depts.$row1['dept']." , ";
                }
-
                $logno=$_GET['LOG'];
                $path=$row['path'];
                echo "<tr>";
@@ -107,10 +110,14 @@ if ($conn->connect_error) {
                echo "<td>" . $row['depcode'] . "-" . $row['number'] . "-" . $row['version'] . "</td>";
                echo "<td>" . $row['effective'] . "</td>";
                echo "<td>" . $row['review'] . "</td>";
-               echo "<td>".substr($logs,0,strlen($logs)-2)."</td>";
-               echo "<td>".substr($forms,0,strlen($forms)-2)."</td>";
-               echo "<td>".substr($depts,0,strlen($depts)-2)."</td>";
-               echo "<td>" . $row['author'] . "</td>";
+
+               if($forms!=="") echo "<td>".substr($forms,0,strlen($forms)-2)."</td>";
+               else echo "<td>***</td>";
+               if($logs!=="") echo "<td>".substr($logs,0,strlen($logs)-2)."</td>";
+               else echo "<td>***</td>";
+
+               if($depts!="") echo "<td>".substr($depts,0,strlen($depts)-2)."</td>";
+               else echo "<td>***</td>";               echo "<td>" . $row['author'] . "</td>";
                echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
 style="background-color: red;color: white;margin-left: 0px" onclick="deletesop(\''.$row['number'].'\',\''.$row['depcode'].'\',\''.$logno.'\')"></td>';
                echo "</tr>";
