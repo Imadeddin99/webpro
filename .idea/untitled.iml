@@ -16,5 +16,6 @@
     <orderEntry type="library" name="bootstrap-multiselect" level="application" />
     <orderEntry type="library" name="bootstrap3-typeahead" level="application" />
     <orderEntry type="library" name="jquery-1.12.4" level="application" />
+    <orderEntry type="library" name="all" level="application" />
   </component>
 </module>

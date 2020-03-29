@@ -34,7 +34,7 @@
                 <li><a href="employeePage.php">Employee page</a></li>
                 <li><a href="formsPage.php">Forms Page</a></li>
                 <li><a href="filePage.php">Files Page</a></li>
-                <li><a href="#">Calender Page</a></li>
+                <li><a href="calenderPage.php">Calender Page</a></li>
 
 
                 <li class="dropdown">
