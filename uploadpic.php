@@ -1,7 +1,10 @@
 <?php
 session_start();
 
-
+if (empty($_SESSION)||!isset($_SESSION)){
+    header("Location:index.php");
+    exit();
+}
 $target_dir = "pics/";
 echo $_SESSION['ID'];
 if(isset($_POST["submit"])) {

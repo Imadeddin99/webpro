@@ -1,10 +1,10 @@
 <?php
-
 session_start();
 if (empty($_SESSION)||!isset($_SESSION)){
     header("Location:index.php");
     exit();
 }
+include 'adminNav.php';
 $servername = "localhost";
 $username='root';
 $pass='';
@@ -14,15 +14,15 @@ $conn = new mysqli($servername, $username, $pass, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);}
 
-$sql11 = "select * from employee where id=".$_POST['id'];
-$result11 = $conn->query($sql11);
-$row11=$result11->fetch_assoc();
-$title=$row11['firstName']." ".$row11["last_name"];
 
-if($_POST['type']=="delete"){
+$title=$_POST['title'];
+$complete=$_POST['complete'];
 
-    $sql = "delete from employee where id=".$_POST['id'];
-    $result = $conn->query($sql);
+$signed=$_SESSION['first']." ".$_SESSION['last'];
+$signed=mysqli_escape_string($conn,$signed);
+$id=$_GET['id'];
+$sql="insert into training(title,complete,signed,id) values('$title','$complete','$signed','$id')";
+if ($conn->query($sql)){
 
     $notifno = 0;
     $sql11 = "select * from notification order by number desc";
@@ -31,10 +31,14 @@ if($_POST['type']=="delete"){
         $row1 = $result11->fetch_assoc();
         $notifno = $row1['number'] + 1;
     }
-
+   $user2="";
+    $sql2222="select * from employee where id=".$id;
+    $result2=$conn->query($sql2222);
+    $row11=$result2->fetch_assoc();
+    $user2=$row11['firstName']." ".$row11['last_name'];
     $user = $_SESSION['first'] . " " . $_SESSION['last'];
     $today = date('Y-n-j');
-    $sql22 = "Insert into notification (number,notif,notifdate,header) values($notifno,'$user deleted an employee  : $title ', '$today','User Deleted')";
+    $sql22 = "Insert into notification (number,notif,notifdate,header) values($notifno,'$user added a Training log : $title to the user $user2 ','$today','Traning LOG Added')";
     $conn->query($sql22);
     $sql22="select * from employee where job='Admin'";
     $result11=$conn->query($sql22);
@@ -49,23 +53,16 @@ if($_POST['type']=="delete"){
 
 
 
-
-
-    header("Location:employeePage.php");
-}
-else if($_POST['type']=="edit"){
-
-
-
+    $_SESSION['ress']="Training Log Added Successfully";
+    $conn->close();
+    header("Location:traning_add.php?id=".$id);
+    exit();
 
 }
+else{
+    $_SESSION['ress']="Training Log was not added";
+    $conn->close();
+   header("Location:traning_add.php?id=".$id);
+    exit();
 
-
-
-
-
-
-
-
-
-?>
+}

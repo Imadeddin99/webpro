@@ -28,12 +28,19 @@ console.log(reg);
 document.getElementById("reg").value=""+reg;
 document.getElementById("selector").value=job;
 
-    $.ajax({
-        type: 'POST',
-        url: 'deleteEdit.php',
-        data: { type: "delete",id:reg },
-        success: function(response) {
-        }
-    });
+
+var object=document.getElementById('edit');
+    object.onclick = function() {
+
+        $.ajax({
+            type: 'POST',
+            url: 'deleteEdit.php',
+            data: {type: "delete", id: reg},
+            success: function (response) {
+            }
+        });
+
+
+    };
 
 }

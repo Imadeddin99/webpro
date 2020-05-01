@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 $servername = "localhost";
 $username='root';
 $pass='';
@@ -11,21 +10,24 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);}
 
 
-$sql = "SELECT id, firstName, last_name ,job_abbr,pass FROM employee where id=".$_POST["reg"];
+$sql = "SELECT * FROM employee where id=".$_POST["reg"];
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $row=$result->fetch_assoc();
-if(($_POST['password']==$row["pass"])&& $row['job_abbr']=="Ad"){
+if(password_verify($_POST['password'],$row["pass"])){
 
     $_SESSION['ID']=$_POST['reg'];
     $_SESSION['first']=$row['firstName'];
     $_SESSION['last']=$row['last_name'];
-    $_SESSION['job']="Admin";
+    $_SESSION['depcode']=$row['depcode'];
+    if( $row['job_abbr']=="Ad") $_SESSION['job']="Admin";
+    else if ( $row['job_abbr']=="QA") $_SESSION['job']="QA";
+    else     $_SESSION['job']="user";
+
     $_SESSION['response']="";
     $conn->close();
-
-header("Location:mainPage.php");
+header("Location:adminNav.php");
 exit();
 }
     $conn->close();

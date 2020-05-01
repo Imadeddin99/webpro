@@ -1,6 +1,9 @@
 <?php
 session_start();
-
+if (empty($_SESSION)||!isset($_SESSION)){
+    header("Location:index.php");
+    exit();
+}
 $servername = "localhost";
 $username='root';
 $pass='';
@@ -11,7 +14,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);}
 
 
-$sql = "update employee set pass='" .$_POST['pass']. "'where id =" . $_SESSION['ID'];
+$sql = "update employee set pass='" .password_hash($_POST['pass'],PASSWORD_DEFAULT). "'where id =" . $_SESSION['ID'];
 $result = $conn->query($sql);
 $conn->close();
 $_SESSION['response']="the password has been changed";

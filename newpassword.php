@@ -1,4 +1,15 @@
 
+
+
+<?php
+session_start();
+if (empty($_SESSION)||!isset($_SESSION)){
+header("Location:index.php");
+exit();
+}
+
+
+?>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">

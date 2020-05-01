@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (empty($_SESSION)||!isset($_SESSION)){
+    header("Location:index.php");
+    exit();
+}
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;

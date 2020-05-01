@@ -1,10 +1,14 @@
 <?php
 session_start();
+if (empty($_SESSION)||!isset($_SESSION)){
+    header("Location:index.php");
+    exit();
+}
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "projectdb";
-
+$notifflag=0;
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
@@ -18,7 +22,7 @@ $result = $conn->query($sql);
 if ($result&&$result->num_rows > 0) {
     // output data of each row
     $row=$result->fetch_assoc();
-    if($row['pass']==$_POST['passs']) {
+    if(password_verify($_POST['passs'],$row["pass"])) {
 
         $sql = "SELECT number, version FROM sop where number='" . $_POST['number']."' and depcode ='".$_POST['depcode']."' and logno='".$_GET['LOG']."' order by version desc";
         $res = $conn->query($sql);
@@ -38,7 +42,11 @@ if ($result&&$result->num_rows > 0) {
     //here to deal with version number
 
     $conn->query($sql);
-$version=$row['version'];
+
+
+
+
+            $version=$row['version'];
 
     switch ($version[1]){
         case '0':$version[1]='1';break;
@@ -80,9 +88,36 @@ $version=$row['version'];
         }
 
     }
+    $notifflag=1;
+            $notifno = 0;
+            $sql11 = "select * from notification order by number desc";
+            $result11 = $conn->query($sql11);
+            if ($result11 && $result11->num_rows > 0) {
+                $row1 = $result11->fetch_assoc();
+                $notifno = $row1['number'] + 1;
+            }
 
 
-    $sql2="delete from relatedlog where sop='".$number."' and reallog='".$_GET['LOG']."'";
+            $user = $_SESSION['first'] . " " . $_SESSION['last'];
+            $name = $depcode ."-". $number . "-" . $version;
+            $today = date('Y-n-j');
+            $sql22 = "Insert into notification (number,notif,notifdate,header) values($notifno,'$user Updated a SOP :$name  ', '$today','SOP Updated')";
+            $conn->query($sql22);
+            $sql22="select * from employee where job='Admin'";
+            $result11=$conn->query($sql22);
+            if ($result11&&$result11->num_rows>0){
+                while ($row1=$result11->fetch_assoc()){
+                    $idddd=$row1['id'];
+                    $sql111="insert into seen(number ,id,state) values($notifno,$idddd,'notseen')";
+                    $conn->query($sql111);
+                }
+            }
+
+
+
+
+
+            $sql2="delete from relatedlog where sop='".$number."' and reallog='".$_GET['LOG']."'";
     $conn->query($sql2);
 
             $sql2="delete from relatedform where sop='".$number."' and log='".$_GET['LOG']."'";
@@ -121,6 +156,7 @@ $version=$row['version'];
             $rev=$_POST['review'];
             $eff = $_POST['effective'];
             $author=$_SESSION['first']." ".$_SESSION['last'];
+            $author=mysqli_escape_string($conn,$author);
             $title=$_POST['title'];
              $logn=$_GET['LOG'];
 
@@ -149,10 +185,45 @@ $version=$row['version'];
 
         $sql1 = "INSERT INTO sop(author,title,effective,review,state,number,version,logno,depcode,path) values('$author','$title','$eff','$rev','$state','$number','$version','$logn','$depcode','$basename2')";
 
-           if ( $conn->query($sql1)===true);
+           if ( $conn->query($sql1)===true){
+               if ($notifflag===0) {
+                   $notifno = 0;
+                   $sql11 = "select * from notification order by number desc";
+                   $result11 = $conn->query($sql11);
+                   if ($result11 && $result11->num_rows > 0) {
+                       $row1 = $result11->fetch_assoc();
+                       $notifno = $row1['number'] + 1;
+                   }
+
+
+                   $user = $_SESSION['first'] . " " . $_SESSION['last'];
+                   $name = $depcode ."-". $number . "-" . $version;
+                   $today = date('Y-n-j');
+
+                   $sql22 = "Insert into notification (number,notif,notifdate,header) values($notifno,'$user added a SOP : $name ', '$today','SOP Added')";
+                   echo $sql22;
+                   if (!$conn->query($sql22))die($conn->error);
+
+                   $sql22="select * from employee where job='Admin'";
+                   $result11=$conn->query($sql22);
+                   if ($result11&&$result11->num_rows>0){
+                       while ($row1=$result11->fetch_assoc()){
+                           $idddd=$row1['id'];
+                           $sql111="insert into seen(number ,id,state) values($notifno,$idddd,'notseen')";
+                           $conn->query($sql111);
+                       }
+                   }
+
+
+
+
+               }
+
+
+           }
            else die('Could not insert into database:' . mysqli_error($conn));
             $conn->close();
-            $_SESSION['formadd'] = "Log Added Successfully";
+            $_SESSION['formadd'] = "SOP Added Successfully";
            header("Location:sopspage.php?LOG=".$_GET['LOG']);
 
 

@@ -1,10 +1,14 @@
 <?php
 session_start();
+if (empty($_SESSION)||!isset($_SESSION)){
+    header("Location:index.php");
+    exit();
+}
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "projectdb";
-
+$notifflag=0;
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
@@ -18,9 +22,9 @@ $result = $conn->query($sql);
 if ($result&&$result->num_rows > 0) {
     // output data of each row
     $row=$result->fetch_assoc();
-    if($row['pass']==$_POST['passs']) {
+    if(password_verify($_POST['passs'],$row["pass"])) {
 
-        $sql = "SELECT form, version FROM form where number='" . $_POST['number']."'and logno=".$_GET['LOG']." order by version desc";
+        $sql = "SELECT form, version FROM form where form='" . $_POST['number']."'and logno=".$_GET['LOG']." order by version desc";
         $res = $conn->query($sql);
         $version='00';
         $state='new';
@@ -80,6 +84,39 @@ if ($result&&$result->num_rows > 0) {
 
             }
 
+            $sql5="delete from formrelateddept where form='".$_POST['number']."' and log='".$_GET['LOG']."'";
+            $conn->query($sql5);
+
+            $notifno=0;
+            $sql11="select * from notification order by number desc";
+            $result11=$conn->query($sql11);
+            if($result11&&$result11->num_rows>0){
+                $row1=$result11->fetch_assoc();
+                $notifno=$row1['number']+1;
+            }
+
+            $notifflag=1;
+
+            $user=$_SESSION['first']." ".$_SESSION['last'];
+            $name="FORM-".$number."-".$version;
+            $today=date('Y-n-j');
+            $sql22="Insert into notification (number,notif,notifdate,header) values($notifno,'$user updated a form $name', '$today','Form Updated')";
+            $conn->query($sql22);
+
+
+            $sql22="select * from employee where job='Admin'";
+            $result11=$conn->query($sql22);
+            if ($result11&&$result11->num_rows>0){
+                while ($row1=$result11->fetch_assoc()){
+                    $idddd=$row1['id'];
+                    $sql111="insert into seen(number ,id,state) values($notifno,$idddd,'notseen')";
+
+                    if (!$conn->query($sql111))die($conn->error);
+
+
+                }
+            }
+
         }
 
 
@@ -99,7 +136,9 @@ if ($result&&$result->num_rows > 0) {
 
         $rev=$_POST['review'];
         $eff = $_POST['effective'];
+
         $author=$_SESSION['first']." ".$_SESSION['last'];
+        $author=mysqli_escape_string($conn,$author);
         $title=$_POST['title'];
         $logn=$_GET['LOG'];
 
@@ -133,23 +172,66 @@ if ($result&&$result->num_rows > 0) {
         else{
             die($conn->error);
         }
+        if ($notifflag===0) {
+            $notifno = 0;
+            $sql11 = "select * from notification order by number desc";
+            $result11 = $conn->query($sql11);
+            if ($result11 && $result11->num_rows > 0) {
+                $row1 = $result11->fetch_assoc();
+                $notifno = $row1['number'] + 1;
+            }
 
+
+            $user = $_SESSION['first'] . " " . $_SESSION['last'];
+            $name = "FORM-" . $number . "-" . $version;
+            $today = date('y-n-j');
+            $sql22 = "Insert into notification (number,notif,notifdate,header) values($notifno,'$user added a form $name : $title ', '$today','Form Added')";
+            $conn->query($sql22);
+
+
+
+            $sql22="select * from employee where job='Admin'";
+            $result11=$conn->query($sql22);
+            if ($result11&&$result11->num_rows>0){
+                while ($row1=$result11->fetch_assoc()){
+                    $idddd=$row1['id'];
+                    $sql111="insert into seen(number ,id,state) values($notifno,$idddd,'notseen')";
+                    $conn->query($sql111);
+                }
+            }
+
+
+
+
+
+
+
+
+        }
+
+        $_SESSION['formadd'] = "form Added Successfully";
         $conn->close();
-        $_SESSION['formadd'] = "Log Added Successfully";
-      //  header("Location:sopspage.php?LOG=".$_GET['LOG']);
-
+        header("Location:form.php?LOG=".$_GET['LOG']);
+        exit();
 
     }
     else{
         $_SESSION['formadd'] = "pass isn't correct";
-       // header("Location:sopspage.php?LOG=".$_GET['LOG']);
+      //  $conn->close();
+
+        header("Location:form.php?LOG=".$_GET['LOG']);
+        exit();
 
     }
 
 
 } else {
     $_SESSION['formadd']="Something wrong happened";
-   // header("Location:sopspage.php?LOG=".$_GET['LOG']);
+   // $conn->close();
+
+    header("Location:form.php?LOG=".$_GET['LOG']);
+    exit();
+
 }
 
 

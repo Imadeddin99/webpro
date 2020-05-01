@@ -1,7 +1,9 @@
 <?php
-session_start();
 include "adminNav.php";
-
+if (empty($_SESSION)||!isset($_SESSION)){
+    header("Location:index.php");
+    exit();
+}
 
 $servername = "localhost";
 $username='root';
@@ -37,7 +39,11 @@ if ($conn->connect_error) {
 
 
 <body onload="document.getElementById('example_wrapper').style.marginLeft='10px'">
-<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add a Log</a>
+
+<?php
+if($_SESSION['job']!='user')echo'<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add a Log</a>';
+?>
+
 <p>
     <?php    if(isset($_SESSION['logadd']) && !empty($_SESSION['logadd'])) {
         echo "<p style='color: red'>".$_SESSION['logadd']."</p>";
@@ -52,7 +58,10 @@ if ($conn->connect_error) {
         <th>Log Title</th>
         <th>Effective Date</th>
         <th>Approved By</th>
-        <th></th>
+        <?php
+        if($_SESSION['job']!='user')echo'<th></th>';
+
+        ?>
     </tr>
     </thead>
     <tbody>
@@ -71,7 +80,7 @@ if ($conn->connect_error) {
             echo "<td> <a href='sopsPage.php?LOG=$num'>LOG-".$row['number']."</a></td>";
             echo "<td>".$row['eff']."</td>";
             echo "<td>".$row['approved']."</td>";
-            echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
+            if($_SESSION['job']!='user')    echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
 style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\''.$row['number'].'\')"></td>';
             echo "</tr>";
         }
@@ -96,8 +105,10 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
         <th>Log Title</th>
         <th>Effective Date</th>
         <th>Approved By</th>
-        <th></th>
+        <?php
+        if($_SESSION['job']!='user')echo'<th></th>';
 
+        ?>
     </tr>
     </tfoot>
 </table>
@@ -115,7 +126,7 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel">Add/Edit An Employee !</h3>
+                <h3 class="modal-title" id="exampleModalLabel">Add/Edit A SOP !</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -150,8 +161,7 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
             url: 'deletelog.php',
             data: { type: "delete",log:number },
             success: function(response) {
-                console.log(response)
-                //window.location.href=page;
+                window.location.href=page;
             }
 
         });

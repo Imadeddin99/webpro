@@ -12,14 +12,6 @@ session_start();
       die("Connection failed: " . $conn->connect_error);
   }*/
 
-if(isset($_POST['reg'])){
-    $reg = $_POST['reg'];
-    $_SESSION["ID"]=$reg;
-}
-else{
-    $_SESSION["ID"]="0000";
-
-}
 
 
 ?>

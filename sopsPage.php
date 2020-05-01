@@ -1,6 +1,9 @@
 <?php
-session_start();
 include 'adminNav.php';
+if (empty($_SESSION)||!isset($_SESSION)){
+    header("Location:index.php");
+    exit();
+}
 
 $servername = "localhost";
 $username='root';
@@ -45,7 +48,11 @@ if ($conn->connect_error) {
 
 
 <body onload="document.getElementById('example_wrapper').style.marginLeft='10px'">
-<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add a SOP</a>
+
+<?php
+if($_SESSION['job']!='user')echo'<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add A SOP</a>';
+?>
+
 <p>
     <?php    if(isset($_SESSION['formadd']) && !empty($_SESSION['formadd'])) {
         echo "<p style='color: red'>".$_SESSION['formadd']."</p>";
@@ -65,8 +72,10 @@ if ($conn->connect_error) {
         <th>Related LOGs</th>
         <th>Distributed to (Departments)</th>
         <th>Author</th>
-        <th></th>
+        <?php
+        if($_SESSION['job']!='user')echo'<th></th>';
 
+        ?>
     </tr>
     </thead>
     <tbody>
@@ -88,7 +97,7 @@ if ($conn->connect_error) {
              while ($row1=$result1->fetch_assoc()){
                  $logs=$logs.$row1['log']." , ";
              }
-               $sql1="select form from relatedform where sop='".$s."' and log='".$_GET['LOG']."'";
+               $sql1="select distinct form from relatedform where sop='".$s."' and log='".$_GET['LOG']."'";
                $result1=$conn->query($sql1);
                $forms='';
                while ($row1=$result1->fetch_assoc()){
@@ -100,7 +109,6 @@ if ($conn->connect_error) {
                $result1=$conn->query($sql1);
                $depts='';
                while ($row1=$result1->fetch_assoc()){
-                   echo $row1['dept'];
                    $depts=$depts.$row1['dept']." , ";
                }
                $logno=$_GET['LOG'];
@@ -118,7 +126,7 @@ if ($conn->connect_error) {
 
                if($depts!="") echo "<td>".substr($depts,0,strlen($depts)-2)."</td>";
                else echo "<td>***</td>";               echo "<td>" . $row['author'] . "</td>";
-               echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
+               if($_SESSION['job']!='user')  echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
 style="background-color: red;color: white;margin-left: 0px" onclick="deletesop(\''.$row['number'].'\',\''.$row['depcode'].'\',\''.$logno.'\')"></td>';
                echo "</tr>";
            }
@@ -149,8 +157,10 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletesop(\
         <th>Related LOGs</th>
         <th>Distributed to (Departments)</th>
         <th>Author</th>
-        <th></th>
+        <?php
+        if($_SESSION['job']!='user')echo'<th></th>';
 
+        ?>
     </tr>
     </tfoot>
 </table>
@@ -214,7 +224,7 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletesop(\
                     <div style="margin-bottom: 10px;">
                     <select multiple="multiple" class="" id="forms" style="width: 100%;" name="relatedforms[]">
                         <?php
-                        $sql = "SELECT form FROM form";
+                        $sql = "SELECT form FROM form where state='new'";
                         $result = $conn->query($sql);
                         if ($result && $result->num_rows > 0) {
                             // output data of each row

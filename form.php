@@ -1,7 +1,9 @@
 <?php
-session_start();
 include 'adminNav.php';
-
+if (empty($_SESSION)||!isset($_SESSION)){
+    header("Location:index.php");
+    exit();
+}
 $servername = "localhost";
 $username='root';
 $pass='';
@@ -45,7 +47,8 @@ if ($conn->connect_error) {
 
 
 <body onload="document.getElementById('example_wrapper').style.marginLeft='10px'">
-<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add a Form</a>
+<?php
+if($_SESSION['job']!='user')echo '<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add a Form</a>'?>
 <p>
     <?php    if(isset($_SESSION['formadd']) && !empty($_SESSION['formadd'])) {
         echo "<p style='color: red'>".$_SESSION['formadd']."</p>";
@@ -63,8 +66,10 @@ if ($conn->connect_error) {
         <th>Review Due Date</th>
         <th>Distributed to (Departments)</th>
         <th>Author</th>
-        <th></th>
+        <?php
+        if($_SESSION['job']!='user')echo'<th></th>';
 
+        ?>
     </tr>
     </thead>
     <tbody>
@@ -77,7 +82,6 @@ if ($conn->connect_error) {
     if ($result && $result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
-            if( $row['logno']==$_GET['LOG']) {
 
 
                 $sql1="select dept from formrelateddept where form='".$row['form']."' and log='".$_GET['LOG']."'";
@@ -97,10 +101,10 @@ $dept=substr($dept,0,strlen($dept)-2);
                 echo "<td>" . $row['review'] . "</td>";
                 echo "<td>".$dept."</td>";
                 echo "<td>" . $row['author'] . "</td>";
-                echo '<td ><input type="button" value="delete" class="btn btn-secondary btn-sm" 
+            if($_SESSION['job']!='user')echo '<td ><input type="button" value="delete" class="btn btn-secondary btn-sm" 
 style="background-color: red;color: white;margin-left: 0px" onclick="deletesop(\''.$row['form'].'\',\''.$logno.'\')"></td>';
                 echo "</tr>";
-            }
+
         }
     }
 
@@ -126,8 +130,10 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletesop(\
         <th>Review Due Date</th>
         <th>Distributed to (Departments)</th>
         <th>Author</th>
-        <th></th>
+        <?php
+        if($_SESSION['job']!='user')echo'<th></th>';
 
+        ?>
     </tr>
     </tfoot>
 </table>

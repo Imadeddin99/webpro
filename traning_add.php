@@ -1,10 +1,9 @@
 <?php
-include "adminNav.php";
-if (empty($_SESSION)||!isset($_SESSION)){
+include 'adminNav.php';
+if (empty($_SESSION)||!isset($_SESSION)||$_SESSION['job']!='Admin'){
     header("Location:index.php");
     exit();
 }
-
 $servername = "localhost";
 $username='root';
 $pass='';
@@ -31,22 +30,31 @@ if ($conn->connect_error) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!--    <script src="deleteAjax.js" type="text/javascript"></script>-->
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <link href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css" rel="stylesheet">
 
+
+
+
+
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
 </head>
 
 
 <body onload="document.getElementById('example_wrapper').style.marginLeft='10px'">
 
 <?php
-if($_SESSION['job']!='user')echo'<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add a Log</a>';
+if($_SESSION['job']!='user')echo '<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add a training LOG</a>';
 ?>
 <p>
-    <?php    if(isset($_SESSION['logadd']) && !empty($_SESSION['logadd'])) {
-        echo "<p style='color: red'>".$_SESSION['logadd']."</p>";
-        $_SESSION['logadd']="";
+    <?php    if(isset($_SESSION['ress']) && !empty($_SESSION['ress'])) {
+        echo "<p style='color: red'>".$_SESSION['ress']."</p>";
+        $_SESSION['ress']="";
     }
     ?>
 
@@ -54,44 +62,42 @@ if($_SESSION['job']!='user')echo'<a type="button" id="modalshow" class="btn btn-
 <table id="example" class="table-hover table table-striped " style="width:90%">
     <thead>
     <tr>
-        <th>Log Title</th>
-        <th>Effective Date</th>
-        <th>Approved By</th>
-        <?php
-        if($_SESSION['job']!='user')echo'<th></th>';
+        <th>Title of Document</th>
+        <th>Signed By</th>
+        <th>Completion Date</th>
+        <th></th>
 
-        ?>    </tr>
+    </tr>
     </thead>
     <tbody>
+<?php
 
-    <?php
+$sql="select * from training where id=".$_GET['id'];
+$result=$conn->query($sql);
+if ($result&&$result->num_rows>0){
+    while($row=$result->fetch_assoc()){
+        $id=$_GET['id'];
+        $title=$row['title'];
+        echo "<tr>";
+        echo "<td>".$row['title']."</td>";
+        echo "<td>".$row['signed']."</td>";
+        echo "<td>".$row['complete']."</td>";
+        echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
+style="background-color: red;color: white;margin-left: 0px" onclick="deletetraining('.$id.',\''.$title.'\')"></td>';
+        echo "</tr>";
 
-    $sql = "SELECT number ,eff,approved FROM log";
-    $result = $conn->query($sql);
 
-    if ($result && $result->num_rows > 0) {
-        // output data of each row
-        while($row = $result->fetch_assoc()) {
-
-            $num=$row['number'];
-            echo "<tr>";
-            echo "<td> <a href='form.php?LOG=$num'>LOG-".$row['number']."</a></td>";
-            echo "<td>".$row['eff']."</td>";
-            echo "<td>".$row['approved']."</td>";
-            if($_SESSION['job']!='user')   echo '<td width="5%"><input type="button" value="delete" class="btn btn-secondary btn-sm" 
-style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\''.$row['number'].'\')"></td>';
-            echo "</tr>";
-        }
     }
+}
 
 
 
 
 
 
-    ?>
 
 
+?>
 
 
 
@@ -100,13 +106,11 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
     </tbody>
     <tfoot>
     <tr>
-        <th>Log Title</th>
-        <th>Effective Date</th>
-        <th>Approved By</th>
-        <?php
-        if($_SESSION['job']!='user')echo'<th></th>';
+        <th>Title of Document</th>
+        <th>Signed By</th>
+        <th>Completion Date</th>
+        <th></th>
 
-        ?>
     </tr>
     </tfoot>
 </table>
@@ -124,20 +128,17 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel">Add/Edit An Employee !</h3>
+                <h3 class="modal-title" id="exampleModalLabel">Add A Training Log !</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="addlog.php" method="post">
-                    <input class="form-control form-control-lg" id="first" type="text" name="number" placeholder="Log Number" style="margin-bottom: 10px" required pattern="[a-zA-Z0-9]{3}" title="You should Enter Valid Log Number">
+                <form action="addtraining.php?id=<?php echo $_GET['id']; ?>" method="post" enctype="multipart/form-data">
+                    <input class="form-control form-control-lg" id="title" type="text" name="title" placeholder="Title" style="margin-bottom: 10px" required >
 
-                    <input type="password" name="passs" class="form-control" id="pass" placeholder="Password" required style="margin-bottom: 10px">
+                    <input class="form-control form-control-lg" id="datepicker" type="text" name="complete" placeholder="completion Date" style="margin-bottom: 10px" required onfocus="this.type='date'" onblur="this.type='text'">
 
-                    <input class="form-control form-control-lg" id="datepicker" type="text" name="eff" placeholder="Effective Date" style="margin-bottom: 10px" required onfocus="this.type='date'" onblur="this.type='text'">
-
-            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Save changes</button>
@@ -148,24 +149,20 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
 </div>
 
 
-
-
 <script>
 
-    function deletelog(number) {
+    function deletetraining(id, title) {
         var page=window.location.href;
         $.ajax({
             type: 'POST',
-            url: 'deletelog.php',
-            data: { type: "delete",log:number },
+            url: 'deletetraining.php',
+            data: { type: "delete",employee:id,title:title },
             success: function(response) {
-                console.log(response)
-                //window.location.href=page;
+                window.location.href=page;
             }
 
         });
     }
-
 
 
 </script>

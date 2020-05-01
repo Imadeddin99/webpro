@@ -1,7 +1,10 @@
 <?php
-session_start();
 include 'adminNav.php';
+if(!isset($_SESSION['job']) || empty($_SESSION['job'])||$_SESSION['job']!='Admin') {
+header("Location:index.php");
+exit();
 
+}
 $servername = "localhost";
 $username='root';
 $pass='';
@@ -10,10 +13,7 @@ $conn = new mysqli($servername, $username, $pass, $dbname);
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);}
-
 ?>
-
-
 <html lang="en">
 
 <head>
@@ -36,22 +36,28 @@ if ($conn->connect_error) {
 
 
 <body onload="document.getElementById('example_wrapper').style.marginLeft='10px'">
-<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add an Employee</a>
+
+
+
+<?php
+if($_SESSION['job']!='user')echo'<a type="button" id="modalshow" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: right;margin-right: 10px">Add an Employee</a>';
+?>
+
 <p>
 <?php    if(isset($_SESSION['ress']) && !empty($_SESSION['ress'])) {
     echo "<p style='color: red'>".$_SESSION['ress']."</p>";
 $_SESSION['ress']="";
 }
 ?>
-
 </p>
 <table id="example" class="table-hover table table-striped " style="width:90%">
+
+
     <thead>
     <tr>
         <th>Name</th>
         <th>Position</th>
         <th>Registration Number</th>
-        <th>Password</th>
         <th>Start date</th>
         <th></th>
         <th></th>
@@ -74,18 +80,53 @@ $_SESSION['ress']="";
     $pass=$row['pass'];
     $start=$row['startDate'];
     $job=$row['job'];
-            echo "<tr>";
-            echo "<td>".$row['firstName']." ".$row['last_name']."</td>";
-            echo "<td>".$row['job']."</td>";
-            echo "<td>".$row['id']."</td>";
-            echo "<td>".$row['pass']."</td>";
-            echo "<td>".$row['startDate']."</td>";
-            echo '<td><input type="button" value="edit" class="btn btn-primary btn-sm" onclick="editAjax('.'\''.$id.'\''.','.'\''.$first.'\''
-                .','.'\''.$last.'\''.','.'\''.$email.'\''.','.'\''.$pass.'\''.','.'\''.$start.'\''.','.'\''.$job.'\''.')" ></td>';
-            echo '<td><input type="button" value="delete" class="btn btn-secondary btn-sm" style="background-color: red;color: white"
- onclick="deleterow('.$id.')"></td>';
 
-            echo "</tr>";
+
+    if ($_SESSION['job']==="Admin") {
+        $idd=$row['id'];
+
+        echo "<tr>";
+        echo "<td><a href='traning_add.php?id=$idd'>" . $row['firstName'] . " " . $row['last_name'] . "</a></td>";
+        echo "<td>" . $row['job'] . "</td>";
+        echo "<td>" . $row['id'] . "</td>";
+        echo "<td>" . $row['startDate'] . "</td>";
+        echo '<td><input type="button" value="edit" class="btn btn-primary btn-sm" onclick="editAjax(' . '\'' . $id . '\'' . ',' . '\'' . $first . '\''
+            . ',' . '\'' . $last . '\'' . ',' . '\'' . $email . '\'' . ',' . '\'' . $pass . '\'' . ',' . '\'' . $start . '\'' . ',' . '\'' . $job . '\'' . ')" ></td>';
+        echo '<td><input type="button" value="delete" class="btn btn-secondary btn-sm" style="background-color: red;color: white"
+ onclick="deleterow(' . $id . ')"></td>';
+
+        echo "</tr>";
+
+
+    }
+
+
+    else{
+
+        echo "<tr>";
+        echo "<td>" . $row['firstName'] . " " . $row['last_name'] . "</td>";
+        echo "<td>" . $row['job'] . "</td>";
+        echo "<td>" . $row['id'] . "</td>";
+        echo "<td>" . $row['startDate'] . "</td>";
+        echo '<td><input type="button" value="edit" class="btn btn-primary btn-sm" onclick="editAjax(' . '\'' . $id . '\'' . ',' . '\'' . $first . '\''
+            . ',' . '\'' . $last . '\'' . ',' . '\'' . $email . '\'' . ',' . '\'' . $pass . '\'' . ',' . '\'' . $start . '\'' . ',' . '\'' . $job . '\'' . ')" ></td>';
+        echo '<td><input type="button" value="delete" class="btn btn-secondary btn-sm" style="background-color: red;color: white"
+ onclick="deleterow(' . $id . ')"></td>';
+
+        echo "</tr>";
+
+
+
+
+    }
+
+
+
+
+
+
+
+
 
         }
     }
@@ -102,7 +143,6 @@ $conn->close();
         <th>Name</th>
         <th>Position</th>
         <th>Registration Number</th>
-        <th>Password</th>
         <th>Start date</th>
         <th></th>
         <th></th>
@@ -141,7 +181,17 @@ $conn->close();
                     <option>Quality Assurance</option>
                     <option>User</option>
                 </select>
-
+                    <select class="form-control" style="margin-bottom: 10px" id="selector" name="depcode" >
+                        <option>CLN</option>
+                        <option>QAU</option>
+                        <option>VAL</option>
+                        <option>REG</option>
+                        <option>DMW</option>
+                        <option>LAB</option>
+                        <option>ITC</option>
+                        <option>MDI</option>
+                        <option>N/A</option>
+                    </select>
                 <input class="form-control form-control-lg" id="datepicker" type="text" name="start" placeholder="Starting Date" style="margin-bottom: 10px" required onfocus="this.type='date'" onblur="this.type='text'">
 
 
@@ -149,7 +199,7 @@ $conn->close();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-primary" id="edit">Save changes</button>
                 </form>
             </div>
         </div>
@@ -163,7 +213,7 @@ $conn->close();
             url: 'deleteEdit.php',
             data: { type: "delete",id:reg },
             success: function(response) {
-                window.location.href="EmployeePage.php"
+                window.location.href="EmployeePage.php";
             }
         });
 
@@ -187,13 +237,20 @@ $conn->close();
         document.getElementById("reg").value=""+reg;
         document.getElementById("selector").value=job;
 
-        $.ajax({
-            type: 'POST',
-            url: 'deleteEdit.php',
-            data: { type: "delete",id:reg },
-            success: function(response) {
-            }
-        });
+        var object=document.getElementById('edit');
+        object.onclick = function() {
+
+            $.ajax({
+                type: 'POST',
+                url: 'deleteEdit.php',
+                data: {type: "delete", id: reg},
+                success: function (response) {
+                    window.location.href="EmployeePage.php";
+                }
+            });
+
+
+        };
 
     }
 </script>

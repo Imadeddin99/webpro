@@ -1,7 +1,12 @@
 <?php
 
-session_start();
 include 'adminNav.php';
+if (empty($_SESSION)||!isset($_SESSION)){
+    header("Location:http://localhost/webpro");
+    exit();
+}
+
+
 $servername = "localhost";
 $username='root';
 $pass='';
@@ -59,6 +64,12 @@ if ($result->num_rows > 0)
                 <th>Email :</th>
                 <td> <?php echo "".$row['email']; ?> </td>
             </tr>
+
+            <tr>
+                <th>Department :</th>
+                <td> <?php echo "".$row['depcode']; ?> </td>
+            </tr>
+
             <tr>
                 <th>Jop position :</th>
                 <td><?php echo "".$row['job']; ?></td>
