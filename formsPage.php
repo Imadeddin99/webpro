@@ -124,7 +124,7 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel">Add/Edit An Employee !</h3>
+                <h3 class="modal-title" id="exampleModalLabel">Add/Edit A LOG !</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -159,8 +159,8 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
             url: 'deletelog.php',
             data: { type: "delete",log:number },
             success: function(response) {
-                console.log(response)
-                //window.location.href=page;
+                //console.log(response)
+                window.location.href=page;
             }
 
         });

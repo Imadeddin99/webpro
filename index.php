@@ -22,7 +22,7 @@ session_start();
 <head>
     <meta charset="utf-8">
     <title> المراكز العلمية-جامعة النجاح الوطنية</title>
-    <link rel="stylesheet" href="style.css" >
+    <link rel="stylesheet" href="style1.css" >
 </head>
 <body>
 

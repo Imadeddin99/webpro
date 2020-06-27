@@ -26,7 +26,7 @@ exit();
     <div class="options">
 
         &nbsp;
-        <a href="#" data-toggle="modal" data-target="#myModal"  >Resend A New Email</a>
+        <a href="#" data-toggle="modal" data-target="#myModal " style="color: white" >Resend A New Email</a>
 
     </div>
     <input type="submit" name="" value="confirm" >

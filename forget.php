@@ -85,7 +85,7 @@ if ($result->num_rows > 0) {
         } catch (Exception $e) {
             $_SESSION['forget-res']="Massage Couldn't be sent please try again later";
             //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            header("Location:index.php#blackout");
+           // header("Location:index.php#blackout");
             $conn->close();
 
             exit();
@@ -99,7 +99,7 @@ if ($result->num_rows > 0) {
         header("Location:index.php#blackout"); exit();
 
     }
-    // header("Location: adminDash.html");
+     header("Location: adminDash.html");
     exit;}
 
 else{

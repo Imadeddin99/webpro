@@ -54,7 +54,7 @@ if ($conn->connect_error) {
 
 
 
-<table id="example" class="table-hover table table-striped " style="width:90%">
+<table id="example" class="table-hover table table-striped " style="width:90% " >
     <thead>
     <tr>
         <th>Title of Document</th>

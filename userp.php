@@ -36,7 +36,7 @@ if ($result->num_rows > 0)
     <meta charset="UTF-8">
     <meta http-equiv="Cache-control" content="no-cache">
     <title></title>
-    <link rel="stylesheet" href="style6.css" >
+    <link rel="stylesheet" href="userps.css" >
 </head>
 <body>
 

@@ -126,7 +126,7 @@ style="background-color: red;color: white;margin-left: 0px" onclick="deletelog(\
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel">Add/Edit A SOP !</h3>
+                <h3 class="modal-title" id="exampleModalLabel">Add/Edit A LOG !</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

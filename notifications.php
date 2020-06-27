@@ -35,6 +35,16 @@ if ($conn->connect_error) {
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#not div").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
     <style>
         *{
             margin: 0px;
@@ -97,11 +107,11 @@ margin-left: 7px;
 
 
 
-
+<!--<input type="text" value="" class="form-group-lg" id="myInput">-->
 
 
 <div class="content"> <h1 class="header" align="center" > Notifications  </h1>
-    <div class="moving-body" >
+    <div class="moving-body" id="not">
         <?php
 
         $sql="select * from seen where id=".$_SESSION['ID']." and state='notseen'";
